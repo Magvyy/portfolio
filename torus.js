@@ -242,19 +242,69 @@ function torus() {
     let image = "";
     let rotMatrix = new rotationalMatrix(rotations * Math.PI / 32, rotations * Math.PI / 32, 0);
     let workers = [];
+
     for (let y = -resolution; y <= resolution; y++) {
-        workers[y + resolution] = new Worker("liner.js");
-        workers[y + resolution].postMessage(y);
+        image += liner(y);
     }
 
-    for (let i = 0; i <= 2 * resolution; i++) {
-        workers[i].onmessage = (e) => {
-            image += e;
-        };
-    }
+    // for (let y = -resolution; y <= resolution; y++) {
+    //     workers[y + resolution] = new Worker("liner.js");
+    //     workers[y + resolution].postMessage(y);
+    // }
+    // for (let i = 0; i <= 2 * resolution; i++) {
+    //     workers[i].onmessage = (e) => {
+    //         image += e;
+    //     };
+    // }
+    
     return image;
 }
 
+function liner(y) {
+    let image = "";
+    let rotMatrix = new rotationalMatrix(rotations * Math.PI / 32, rotations * Math.PI / 32, 0);
+    let torusVec = rotMatrix.mul(new Vector(null, null, [0, 0, 1]));
+    let camVec = rotMatrix.mul(new Vector(null, null, [0, 0, 20]));
+
+    loop:
+    for (let x = -resolution; x <= resolution; x++) {
+        // Get vector then transform according to rotational matrix
+        let ray = new Vector(camVec.getEnd(), new Point([x, y, 0]), null);
+
+        // Project said vector onto the plane defined by the normal vector of the torus
+        let proj = ray.sub(torusVec.scale(ray.dot(torusVec)));
+        let pos = proj.norm().scale(R);
+        let neg = proj.norm().scale(-R);
+        if (ray.sub(neg).len() < ray.sub(pos).len()) {
+            proj = neg;
+        }
+        else {
+            proj = pos;
+        }
+
+        // ray = ray.norm().scale(100);
+        for (let i = 0; i < 150; i++) {
+            ray = ray.sub(ray.norm().scale(r / 15));
+            let diff = ray.sub(proj);
+            if (diff.len() < r) {
+                let end = ray.getEnd();
+                while (diff.len() < r) {
+                    ray = ray.sub(ray.norm().scale(r / 30));
+                    end = ray.getEnd();
+                }
+                let c = brightness(end);
+                image += c;
+                continue loop;
+            }
+        }
+        image += char;
+        if (x != resolution - 1) {
+            image += " ";
+        }
+    }
+    image += "\n";
+    return image;
+}
 
 
 const output = document.getElementById("torus-text");
