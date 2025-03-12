@@ -1,21 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="./styles.css"/>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magvy's Portfolio</title>
-</head>
-<body>
-    <h1> Magvy's Portfolio </h1>
-    <h2> I'm a developer that specializes in web-development </h2>
-    <hr />
-    <p>
-        The following are my
-        <a href="https://github.com/Magvyy?tab=repositories">github repositories</a>,
-        note that they are not all owned/made by me.
-    </p>
 
-    <a href="./resume.html"> Here is my resume. </a>
-</body>
+    <head>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link href="style.css" rel="stylesheet" type="text/css">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#"> Magvy </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">GitHub</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">LinkedIn</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Contact me
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+        </nav>
+
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="100000">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img class="d-block h-20" src="./resources/Mark1.jpg" alt="First slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block h-20" src="./resources/Mark2.jpg" alt="Second slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block h-20" src="./resources/Mark3.jpg" alt="Third slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block h-20" src="./resources/Mark4.jpg" alt="Fourth slide">
+              </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card text-white bg-dark mb-3" id="work" style="width: 54rem;">
+                <div class="card-header">Shit I've done</div>
+                <div class="card-body">
+                <h5 class="card-title">GAMING WARLORD</h5>
+                <p class="card-text">Reached top 500 in Europe on overwatch solo qing the hardest role. 1v3'd a professional team in apex legends to avenge my fallen ally. Got a bachelor's in physics with a 3.0 GPA without every attending a lecture.</p>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Ascii Webcam</h5>
+                    <p class="card-text">Turns plugged webcam feed into character output for a terminal.</p>
+                    <a href="#" class="btn btn-primary">GitHub</a>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Ascii Webcam</h5>
+                    <p class="card-text">Turns plugged webcam feed into character output for a terminal.</p>
+                    <a href="#" class="btn btn-primary">GitHub</a>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Ascii Webcam</h5>
+                    <p class="card-text">Turns plugged webcam feed into character output for a terminal.</p>
+                    <a href="#" class="btn btn-primary">GitHub</a>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Ascii Webcam</h5>
+                    <p class="card-text">Turns plugged webcam feed into character output for a terminal.</p>
+                    <a href="#" class="btn btn-primary">GitHub</a>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Ascii Webcam</h5>
+                    <p class="card-text">Turns plugged webcam feed into character output for a terminal.</p>
+                    <a href="#" class="btn btn-primary">GitHub</a>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Ascii Webcam</h5>
+                    <p class="card-text">Turns plugged webcam feed into character output for a terminal.</p>
+                    <button id="button" type="button">GitHub</button>
+                </div>
+            </div>
+
+          <div class="card text-white bg-dark mb-3" id="torus" style="width: 54rem;">
+            <div class="card-header">Shit I've done</div>
+            <div class="card-body">
+            <h5 class="card-title">GAMING WARLORD</h5>
+            <p class="card-text" id="torus-text">Reached top 500 in Europe on overwatch solo qing the hardest role. 1v3'd a professional team in apex legends to avenge my fallen ally. Got a bachelor's in physics with a 3.0 GPA without every attending a lecture.</p>
+            </div>
+          </div>
+        </div>
+
+        
+        
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="torus.js"></script>
+    </body>
+
+    
 </html>
