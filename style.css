@@ -76,14 +76,18 @@ body {
     justify-content: space-between;
 }
 
-.dhops-container {
-    display: flex;
-    justify-content: space-between;
+footer {
+    /* align-content: flex-end; */
+    font-size: 40px;
 }
 
 @media (max-width: 1800px) {
-    .dhops-container {
+    #dhops {
         display: none;
+    }
+
+    footer {
+        margin: 0 auto;
     }
 
     .container {
