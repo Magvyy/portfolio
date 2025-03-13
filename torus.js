@@ -1,7 +1,12 @@
 class Point {
     point;
+    dim;
     constructor(point) {
+        if (point == null) {
+            return;
+        }
         this.point = point;
+        this.dim = point.length;
     }
 
     getPoint() {
@@ -12,8 +17,16 @@ class Point {
         return new Vector(new Point(that.point), new Point(this.point), null);
     }
 
-    dim() {
-        return this.point.length;
+    getDim() {
+        return this.dim;
+    }
+
+    dist(that) {
+        let sum = 0;
+        for (let i = 0; i < this.dim; i++) {
+            sum += (this.point[i] - that.point[i]) ** 2;
+        }
+        return Math.sqrt(sum);
     }
 }
 
@@ -21,18 +34,34 @@ class Vector {
     start;
     end;
     coords;
+    dim;
     // let ray = new Vector(camPnt.getEnd(), new Point([x, y, 0]), null);
 
     constructor(start, end, coords) {
-        if (start != null) {
+        if (start != null && end != null) {
+            this.dim = start.getDim();
             this.start = start;
             this.end = end;
             coords = [];
-            for (let i = 0; i < this.start.dim(); i++) {
+            for (let i = 0; i < this.dim; i++) {
                 coords[i] = end.getPoint()[i] - start.getPoint()[i];
             }
             this.coords = coords;
             return;
+        }
+        if (end != null) {
+            start = [];
+            coords = [];
+            for (let i = 0; i < end.getDim(); i++) {
+                start[i] = 0;
+                coords[i] = end.getPoint()[i];
+            }
+            this.start = new Point(start);
+            this.end = end;
+            this.coords = coords;
+            this.dim = coords.length;
+            return;
+            
         }
         start = [];
         for (let i = 0; i < coords.length; i++) {
@@ -41,6 +70,7 @@ class Vector {
         this.start = new Point(start);
         this.end = new Point(coords);
         this.coords = coords;
+        this.dim = coords.length;
     }
 
     getCoords() {
@@ -57,7 +87,7 @@ class Vector {
 
     add(that) {
         let newEnd = [];
-        for (let i = 0; i < this.end.dim(); i++) {
+        for (let i = 0; i < this.dim; i++) {
             newEnd[i] = this.end.getPoint()[i] + that.coords[i];
         }
         return new Vector(this.start, new Point(newEnd), null);
@@ -66,7 +96,7 @@ class Vector {
     sub(that) {
         let newEnd = [];
         that = that.scale(-1);
-        for (let i = 0; i < this.end.dim(); i++) {
+        for (let i = 0; i < this.dim; i++) {
             newEnd[i] = this.end.getPoint()[i] + that.coords[i];
         }
         return new Vector(this.start, new Point(newEnd), null);
@@ -74,7 +104,7 @@ class Vector {
 
     dot(that) {
         let sum = 0;
-        for (let i = 0; i < this.coords.length; i++) {
+        for (let i = 0; i < this.dim; i++) {
             sum += this.coords[i] * that.coords[i];
         }
         return sum;
@@ -82,7 +112,7 @@ class Vector {
 
     len() {
         let sum = 0;
-        for (let i = 0; i < this.coords.length; i++) {
+        for (let i = 0; i < this.dim; i++) {
             sum += this.coords[i] ** 2;
         }
         return Math.sqrt(sum);
@@ -92,18 +122,17 @@ class Vector {
         let length = this.len();
         let newCoords = [];
         let newEnd = [];
-        for (let i = 0; i < this.coords.length; i++) {
+        for (let i = 0; i < this.dim; i++) {
             newCoords[i] = this.coords[i] / length;
             newEnd[i] = this.start.getPoint()[i] + newCoords[i];
         }
-        // console.log(this.coords);
         return new Vector(this.start, new Point(newEnd), null);
     }
 
     scale(scalar) {
         let newCoords = [];
         let newEnd = [];
-        for (let i = 0; i < this.coords.length; i++) {
+        for (let i = 0; i < this.dim; i++) {
             newCoords[i] = this.coords[i] * scalar;
             newEnd[i] = this.start.getPoint()[i] + newCoords[i];
         }
@@ -112,12 +141,12 @@ class Vector {
 
     perp() {
         let sum = 0;
-        for (let i = 0; i < this.coords.length; i++) {
+        for (let i = 0; i < this.dim; i++) {
             sum += this.coords[i];
         }
         let v = - (sum) / this.coords[this.coords.length - 1];
         let coords = []
-        for (let i = 0; i < this.coords.length; i++) {
+        for (let i = 0; i < this.dim; i++) {
             coords[i] = 1;
         }
         coords[coords.length - 1] = v;
@@ -125,64 +154,46 @@ class Vector {
         return vec;
     }
 
-    dim() {
-        return this.coords.length;
+    getDim() {
+        return this.dim;
+    }
+
+    travel(point) {
+        let end = [];
+        for (let i = 0; i < this.dim; i++) {
+            end[i] = point.getPoint()[i] + this.coords[i];
+        }
+        return new Point(end);
+    }
+
+    angle(that) {
+        return Math.acos(this.dot(that) / (this.len() * that.len()));
+    }
+
+    cross(that) {
+        let coords1 = this.coords;
+        let coords2 = that.coords;
+        let x = coords1[1] * coords2[2] - coords1[2] * coords2[1];
+        let y = coords1[2] * coords2[0] - coords1[0] * coords2[2];
+        let z = coords1[0] * coords2[1] - coords1[1] * coords2[0];
+        return new Vector(null, null, [x, y, z]);
+    }
+
+    minDist(point) {
+        let pl = this.getStart();
+        let c = this.dot(new Vector(null, point, null).sub(new Vector(null, pl, null))) / this.dot(this);
+        let closest = this.scale(c).travel(pl);
+        return point.dist(closest);
     }
 }
 
-class Matrix {
-    matrix;
-    constructor(matrix, width) {
-        if (matrix == null) {
-            this.matrix = [];
-            for (let i = 0; i < width; i++) {
-                this.matrix[i] = [];
-                for (let j = 0; j < width; j++) {
-                    this.matrix[i][j] = 0;
-                }
-            }
-            return;
-        }
-        this.matrix = [];
-        for (let i = 0; i < matrix.length; i++) {
-            this.matrix[i] = [];
-            for (let j = 0; j < width; j++) {
-                this.matrix[i][j] = matrix[i][j];
-            }
-        }
-    }
-
-    vecMul(vector) {
-        let start = vector.getStart();
-        let end = vector.getEnd();
-        let newStart = [];
-        let newEnd = [];
-        for (let i = 0; i < this.matrix.length; i++) {
-            let sum1 = 0;
-            let sum2 = 0;
-            for (let j = 0; j < vector.dim(); j++) {
-                sum1 += start.getPoint()[j] * matrix[i][j];
-                sum2 += end.getPoint()[j] * matrix[i][j];
-            }
-            newStart[i] = sum1;
-            newEnd[i] = sum2;
-        }
-        return new Vector(new Point(newStart), new Point(newEnd), null);
-    }
-
-    pntMul(point) {
-
-    }
-}
-
-class rotationalMatrix extends Matrix {
+class rotationalMatrix {
     matrix;
     constructor(alpha, beta, gamma) {
-        super(null, 3);
         this.matrix = [];
         let m11 = Math.cos(beta) * Math.cos(gamma);
         let m12 = Math.sin(alpha) * Math.sin(beta) * Math.cos(gamma) - Math.cos(alpha) * Math.sin(gamma);
-        let m13 = Math.cos(alpha) * Math.sin(beta) * Math.cos(gamma) + Math.cos(alpha) * Math.sin(gamma);
+        let m13 = Math.cos(alpha) * Math.sin(beta) * Math.cos(gamma) + Math.sin(alpha) * Math.sin(gamma);
 
         let m21 = Math.cos(beta) * Math.sin(gamma);
         let m22 = Math.sin(alpha) * Math.sin(beta) * Math.sin(gamma) + Math.cos(alpha) * Math.cos(gamma);
@@ -198,7 +209,7 @@ class rotationalMatrix extends Matrix {
     }
     
 
-    mul(vector) {
+    vecMul(vector) {
         let start = vector.getStart();
         let end = vector.getEnd();
         let newStart = [];
@@ -206,7 +217,7 @@ class rotationalMatrix extends Matrix {
         for (let i = 0; i < this.matrix.length; i++) {
             let sum1 = 0;
             let sum2 = 0;
-            for (let j = 0; j < vector.dim(); j++) {
+            for (let j = 0; j < vector.getDim(); j++) {
                 sum1 += start.getPoint()[j] * this.matrix[i][j];
                 sum2 += end.getPoint()[j] * this.matrix[i][j];
             }
@@ -215,92 +226,109 @@ class rotationalMatrix extends Matrix {
         }
         return new Vector(new Point(newStart), new Point(newEnd), null);
     }
+
+    pntMul(point) {
+        let newPoint = [];
+        for (let i = 0; i < this.matrix.length; i++) {
+            let sum = 0;
+            for (let j = 0; j < point.getDim(); j++) {
+                sum += point.getPoint()[j] * this.matrix[i][j];
+            }
+            newPoint[i] = sum;
+        }
+        return new Point(newPoint);
+    }
+}
+
+class Torus {
+    R;
+    r;
+    center;
+    vector;
+    matrix;
+    constructor(R, r, center, vector) {
+        this.R = R;
+        this.r = r;
+        this.center = center;
+        this.vector = vector;
+    }
+
+    rotate(alpha, beta, gamma) {
+        this.matrix = new rotationalMatrix(alpha, beta, gamma);
+        this.vector = this.matrix.vecMul(this.vector);
+    }
+
+    lineCollide(line) {
+        let min = line.minDist(this.center);
+        if (min > this.R) {
+            return char;
+        }
+        let matrix = new rotationalMatrix(rotations * alpha, rotations * beta, rotations * gamma);
+        let points = 30;
+        let ch = char;
+        let minLen = 200;
+        for (let i = 0; i < points; i++) {   
+            let angle = i * 2 * Math.PI / points;
+            let vec = new Vector(null, null, [Math.cos(angle), Math.sin(angle), 0]);
+            let Rvec = matrix.vecMul(vec).scale(this.R);
+            let p = Rvec.travel(this.center);
+            min = line.minDist(p);
+            if (min <= this.r) {
+                let pl = line.getStart();
+                let c = line.dot(new Vector(null, p, null).sub(new Vector(null, pl, null))) / line.dot(line);
+                let len = line.len() * c - Math.sqrt(this.r ** 2 - min ** 2);
+                if (len < minLen) {
+                    minLen = len;
+                    var index = (len / dist) * ascii.length;
+                    ch = ascii.charAt(index);
+                }
+            }
+        }   
+        return ch;
+    }
 }
  
-const ascii = ".'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
-const char = ascii.charAt(10);
+const ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.";
+const char = ascii.charAt(ascii.length - 1);
 
-let R = 10;
+let R = 15;
 let r = 5;
-let c2 = 2 * Math.PI;
-let resolution = 50;
-const dist = 50;
+let resolution = 25;
+const dist = 150;
 
 const origin = new Point([0, 0, 0]);
 const camPnt = new Point([0, 0, 50]);
+const camVec = new Vector(origin, camPnt, null);
 
 let rotations = 0;
+let torus = new Torus(R, r, new Point([0, 0, 0]), new Vector(null, null, [0, 0, 1]));
 
-function brightness(point) {
-    var vec = camPnt.sub(point);
-    var len = vec.len();
-    var index = (len / dist) * ascii.length;
-    return ascii.charAt(index);
-}
+const alpha = 2 * Math.PI / 79;
+const beta = 2 * Math.PI / 83;
+const gamma = 2 * Math.PI / 89;
 
-function torus() {
+
+function animation() {
+    torus.rotate(alpha, beta, gamma);
     let image = "";
-    let rotMatrix = new rotationalMatrix(rotations * Math.PI / 32, rotations * Math.PI / 32, 0);
-    let workers = [];
-
     for (let y = -resolution; y <= resolution; y++) {
         image += liner(y);
     }
-
-    // for (let y = -resolution; y <= resolution; y++) {
-    //     workers[y + resolution] = new Worker("liner.js");
-    //     workers[y + resolution].postMessage(y);
-    // }
-    // for (let i = 0; i <= 2 * resolution; i++) {
-    //     workers[i].onmessage = (e) => {
-    //         image += e;
-    //     };
-    // }
-    
     return image;
 }
 
+
 function liner(y) {
     let image = "";
-    let rotMatrix = new rotationalMatrix(rotations * Math.PI / 32, rotations * Math.PI / 32, 0);
-    let torusVec = rotMatrix.mul(new Vector(null, null, [0, 0, 1]));
-    let camVec = rotMatrix.mul(new Vector(null, null, [0, 0, 20]));
 
     loop:
     for (let x = -resolution; x <= resolution; x++) {
-        // Get vector then transform according to rotational matrix
-        let ray = new Vector(camVec.getEnd(), new Point([x, y, 0]), null);
-
-        // Project said vector onto the plane defined by the normal vector of the torus
-        let proj = ray.sub(torusVec.scale(ray.dot(torusVec)));
-        let pos = proj.norm().scale(R);
-        let neg = proj.norm().scale(-R);
-        if (ray.sub(neg).len() < ray.sub(pos).len()) {
-            proj = neg;
-        }
-        else {
-            proj = pos;
-        }
-
-        // ray = ray.norm().scale(100);
-        for (let i = 0; i < 150; i++) {
-            ray = ray.sub(ray.norm().scale(r / 15));
-            let diff = ray.sub(proj);
-            if (diff.len() < r) {
-                let end = ray.getEnd();
-                while (diff.len() < r) {
-                    ray = ray.sub(ray.norm().scale(r / 30));
-                    end = ray.getEnd();
-                }
-                let c = brightness(end);
-                image += c;
-                continue loop;
-            }
-        }
-        image += char;
-        if (x != resolution - 1) {
+        if (x != resolution - 1 && x != -resolution) {
             image += " ";
         }
+        // Get vector then transform according to rotational matrix
+        let ray = new Vector(camPnt, new Point([x, y, 0]), null).norm();
+        image += torus.lineCollide(ray);
     }
     image += "\n";
     return image;
@@ -309,7 +337,7 @@ function liner(y) {
 
 const output = document.getElementById("torus-text");
 var intervalId = setInterval(function() {
-    let image = torus();
+    let image = animation();
     output.innerHTML = image;
     rotations++;
-}, 2000);
+}, 25);
