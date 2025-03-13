@@ -54,19 +54,17 @@ body {
 }
 
 #torus {
-    width: 650px !important;
-    height: 550px !important;
+    max-width: fit-content;
+    max-height: fit-content;
+    min-width: fit-content;
+    min-height: fit-content;
     background-color:rgb(45, 49, 53) !important;
 }
 
 #torus-text {
-    font-size: 10px !important;
-    line-height: 8px !important;
+    font-family: monospace;
     color: white !important;
     white-space: pre;
-    text-align: justify;
-    -moz-text-align-last: justify;
-    text-align-last: justify;
 }
 
 .btn {
@@ -112,7 +110,5 @@ body {
     #work {
         grid-row: span 1;
         grid-column: span 2;
-        width: 100% !important;
-        height: 100% !important;
     }
 }

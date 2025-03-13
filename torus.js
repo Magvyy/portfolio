@@ -279,7 +279,7 @@ class Torus {
                 let len = line.len() * c - Math.sqrt(this.r ** 2 - min ** 2);
                 if (len < minLen) {
                     minLen = len;
-                    var index = (len / dist) * ascii.length;
+                    var index = (len / dist) * ascii.length * 0.5;
                     ch = ascii.charAt(index);
                 }
             }
@@ -291,11 +291,22 @@ class Torus {
 const ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.";
 const char = ascii.charAt(ascii.length - 1);
 
-let R = 15;
-let r = 5;
-let resolution = 25;
-const dist = 150;
+const R = 15;
+const r = 5;
+const xResolution = 75;
+const yResolution = 75;
+const xLimit = 25;
+const yLimit = 25;
+const xRatio = (2 * xLimit) / xResolution;
+const yRatio = (2 * xLimit) / yResolution;
+let pixel = 10 * (50 / xResolution);
 
+let torusText = document.getElementById("torus-text");
+console.log(torusText);
+torusText.style.fontSize = pixel + "px";
+torusText.style.lineHeight = pixel + "px";
+
+const dist = 200;
 const origin = new Point([0, 0, 0]);
 const camPnt = new Point([0, 0, 50]);
 const camVec = new Vector(origin, camPnt, null);
@@ -311,7 +322,7 @@ const gamma = 2 * Math.PI / 89;
 function animation() {
     torus.rotate(alpha, beta, gamma);
     let image = "";
-    for (let y = -resolution; y <= resolution; y++) {
+    for (let y = -yLimit; y <= yLimit; y += yRatio) {
         image += liner(y);
     }
     return image;
@@ -322,8 +333,8 @@ function liner(y) {
     let image = "";
 
     loop:
-    for (let x = -resolution; x <= resolution; x++) {
-        if (x != resolution - 1 && x != -resolution) {
+    for (let x = -xLimit; x <= xLimit; x += xRatio) {
+        if (x != -xLimit) {
             image += " ";
         }
         // Get vector then transform according to rotational matrix
