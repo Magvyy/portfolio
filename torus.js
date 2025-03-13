@@ -340,4 +340,4 @@ var intervalId = setInterval(function() {
     let image = animation();
     output.innerHTML = image;
     rotations++;
-}, 25);
+}, 250);
