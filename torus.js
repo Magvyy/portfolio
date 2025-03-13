@@ -323,28 +323,18 @@ function animation() {
     torus.rotate(alpha, beta, gamma);
     let image = "";
     for (let y = -yLimit; y <= yLimit; y += yRatio) {
-        image += liner(y);
-    }
-    return image;
-}
-
-
-function liner(y) {
-    let image = "";
-
-    loop:
-    for (let x = -xLimit; x <= xLimit; x += xRatio) {
-        if (x != -xLimit) {
-            image += " ";
+        for (let x = -xLimit; x <= xLimit; x += xRatio) {
+            if (x != -xLimit) {
+                image += " ";
+            }
+            // Get vector then transform according to rotational matrix
+            let ray = new Vector(camPnt, new Point([x, y, 0]), null).norm();
+            image += torus.lineCollide(ray);
         }
-        // Get vector then transform according to rotational matrix
-        let ray = new Vector(camPnt, new Point([x, y, 0]), null).norm();
-        image += torus.lineCollide(ray);
+        image += "\n";
     }
-    image += "\n";
     return image;
 }
-
 
 const output = document.getElementById("torus-text");
 var intervalId = setInterval(function() {
