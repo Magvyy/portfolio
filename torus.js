@@ -278,7 +278,7 @@ class Torus {
                 let len = line.len() * c - Math.sqrt(this.r ** 2 - min ** 2);
                 if (len < minLen) {
                     minLen = len;
-                    var index = (len / dist) * ascii.length * 0.5;
+                    var index = ((len - 25) / dist) * ascii.length;
                     ch = ascii.charAt(index);
                 }
             }
@@ -287,13 +287,13 @@ class Torus {
     }
 }
  
-const ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.";
+const ascii = "$@B%8&WM#oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.";
 const char = ascii.charAt(ascii.length - 1);
 
 const R = 15;
 const r = 5;
-const xResolution = 75;
-const yResolution = 75;
+const xResolution = 25;
+const yResolution = 25;
 const xLimit = 25;
 const yLimit = 25;
 const xRatio = (2 * xLimit) / xResolution;
@@ -305,7 +305,7 @@ console.log(torusText);
 torusText.style.fontSize = pixel + "px";
 torusText.style.lineHeight = pixel + "px";
 
-const dist = 200;
+const dist = 75;
 const origin = new Point([0, 0, 0]);
 const camPnt = new Point([0, 0, 50]);
 const camVec = new Vector(origin, camPnt, null);
