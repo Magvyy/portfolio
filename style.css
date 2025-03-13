@@ -104,7 +104,7 @@ footer {
     }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 991px) {
     .container {
         grid-template-columns: repeat(2, minmax(fit-content, 25vw));
         grid-template-rows: repeat(4, minmax(fit-content, 20vh));
@@ -114,5 +114,14 @@ footer {
     #work {
         grid-row: span 1;
         grid-column: span 2;
+    }
+
+    .navbar-toggler {
+        height: 60px;
+        width: 80px;
+    }
+
+    .navbar-brand {
+        font-size: 50px;
     }
 }
