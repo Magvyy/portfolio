@@ -260,15 +260,14 @@ class Torus {
 
     lineCollide(line) {
         let min = line.minDist(this.center);
-        if (min > this.R) {
+        if (min > this.R + r) {
             return char;
         }
         let matrix = new rotationalMatrix(rotations * alpha, rotations * beta, rotations * gamma);
-        let points = 30;
         let ch = char;
         let minLen = 200;
-        for (let i = 0; i < points; i++) {   
-            let angle = i * 2 * Math.PI / points;
+        for (let i = 0; i < spheres; i++) {   
+            let angle = i * 2 * Math.PI / spheres;
             let vec = new Vector(null, null, [Math.cos(angle), Math.sin(angle), 0]);
             let Rvec = matrix.vecMul(vec).scale(this.R);
             let p = Rvec.travel(this.center);
@@ -313,6 +312,7 @@ const camVec = new Vector(origin, camPnt, null);
 
 let rotations = 0;
 let torus = new Torus(R, r, new Point([0, 0, 0]), new Vector(null, null, [0, 0, 1]));
+const spheres = 30;
 
 const alpha = 2 * Math.PI / 79;
 const beta = 2 * Math.PI / 83;
