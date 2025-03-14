@@ -124,4 +124,12 @@ footer {
     .navbar-brand {
         font-size: 50px;
     }
+
+    .nav-item {
+        font-size: 25px;
+    }
+
+    .dropdown-item {
+        font-size: 25px;
+    }
 }
