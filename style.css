@@ -12,38 +12,53 @@ body {
     background-color:rgb(45, 49, 53) !important;
 }
 
-.carousel img {
+#me {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#me img {
     margin: auto;
     max-height: 500px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.carousel {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.container {
+#projects {
     display: grid;
-    grid-template-columns: repeat(6, minmax(fit-content, 15vw));
-    grid-template-rows: repeat(2, minmax(fit-content, 15vh));
+    grid-template-columns: repeat(3, 15vw);
+    grid-template-rows: repeat(2, fit-content);
     gap: 10px;
     width: calc(90vw + 50px) !important;
     justify-content: center;
 }
 
-#work {
+/* #work {
     grid-row: span 2;
     grid-column: span 3;
     width: 100% !important;
     height: 100% !important;
     background-color:rgb(45, 49, 53) !important;
-}
+} */
 
-.card {
+.project-card {
     width: 100% !important;
     height: 100% !important;
     background-color:rgb(45, 49, 53) !important;
     box-sizing: border-box;
+    padding: 20px;
+    display: grid;
+    grid-template-rows: auto auto 40px;
+}
+
+.btn {
+    background-color: #383c44 !important;
+    border: none;
 }
 
 .torus-container {
@@ -65,10 +80,6 @@ body {
     font-family: monospace;
     color: white !important;
     white-space: pre;
-}
-
-.btn {
-    background-color: #383c44 !important;
 }
 
 .dhops-container {

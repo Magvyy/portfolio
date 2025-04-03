@@ -185,6 +185,13 @@ class Vector {
         let closest = this.scale(c).travel(pl);
         return point.dist(closest);
     }
+
+    perpVec() {
+        let coords = this.coords;
+        coords[0] += 1;
+        let vec = new Vector(null, null, coords);
+        return this.cross(vec);
+    }
 }
 
 class rotationalMatrix {
@@ -246,11 +253,18 @@ class Torus {
     center;
     vector;
     matrix;
+    spheres;
     constructor(R, r, center, vector) {
         this.R = R;
         this.r = r;
         this.center = center;
         this.vector = vector;
+        // this.spheres = [];
+        // for (let i = 0; i < spheres; i++) {
+        //     let angle = i * 2 * Math.PI / spheres;
+        //     let vec = this.vector.perpVec();
+        //     this.spheres[i] = new Sphere()
+        // }
     }
 
     rotate(alpha, beta, gamma) {
@@ -286,6 +300,84 @@ class Torus {
         return ch;
     }
 }
+
+class Sphere {
+    center;
+    radius;
+    constructor(center, radius) {
+        this.center = center;
+        this.radius = radius;
+    }
+
+    contains(point) {
+        return this.center.dist(point) <= this.radius;
+    }
+    
+    intersects(line) {
+        let minDist = line.minDist(this.center);
+        return minDist <= this.radius;
+    }
+
+    intersection(line) {
+        let linePoint = line.getStart();
+        let centerVec = new Vector(null, this.center, null);
+        let lineVec = new Vector(null, linePoint, null);
+        let c = line.dot(centerVec.sub(lineVec)) / line.dot(line);
+        let minDist = line.minDist(this.center);
+        let len = line.len() * c - Math.sqrt(this.radius ** 2 - minDist ** 2);
+        return line.scale(c).travel(linePoint);
+    }
+
+    distance(line) {
+        let linePoint = line.getStart();
+        let centerVec = new Vector(null, this.center, null);
+        let lineVec = new Vector(null, linePoint, null);
+        let c = line.dot(centerVec.sub(lineVec)) / line.dot(line);
+        let minDist = line.minDist(this.center);
+        let len = line.len() * c - Math.sqrt(this.radius ** 2 - minDist ** 2);
+        return len;
+    }
+}
+
+class SolarSystem {
+    center;
+    bodies;
+    constructor(center, bodies) {
+        this.center = center;
+        this.bodies = bodies;
+    }
+
+    rotate(alpha, beta, gamma) {
+        for (let i = 0; i < this.bodies.length; i++) {
+            let body = this.bodies[i];
+            let radius = body.center.dist(this.center);
+            let coeff = 1;
+            if (radius != 0) {
+                coeff = 25 / radius;
+            }
+            let matrix = new rotationalMatrix(coeff * alpha, coeff * beta, coeff * gamma);
+            let center = body.center;
+            center = matrix.pntMul(center);
+            this.bodies[i].center = center;
+        }
+    }
+
+    lineCollide(line) {
+        for (let i = 0; i < this.bodies.length; i++) {
+            let body = this.bodies[i];
+            if (body.intersects(line)) {
+                let len = body.distance(line);
+                var index = ((len - 25) / dist) * ascii.length;
+                if (index < 0) {
+                    index = 0;
+                }
+                // console.log(index);
+                return ascii.charAt(index);
+            }
+        }
+        return char;
+    }
+}
  
 const ascii = "$@B%8&WM#oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.";
 const char = ascii.charAt(ascii.length - 1);
@@ -314,13 +406,23 @@ let rotations = 0;
 let torus = new Torus(R, r, new Point([0, 0, 0]), new Vector(null, null, [0, 0, 1]));
 const spheres = 30;
 
+let bodies = [
+    new Sphere(origin, 3),
+    new Sphere(new Point([15, 0, 0]), 2),
+    new Sphere(new Point([12, 5, 0]), 2),
+];
+let solarSystem = new SolarSystem(origin, bodies);
+
+// const alpha = 0;
+// const beta = 0;
+const gamma = 2 * Math.PI / 89;
 const alpha = 2 * Math.PI / 79;
 const beta = 2 * Math.PI / 83;
-const gamma = 2 * Math.PI / 89;
 
+let shape = torus;
 
 function animation() {
-    torus.rotate(alpha, beta, gamma);
+    shape.rotate(alpha, beta, gamma);
     let image = "";
     for (let y = -yLimit; y <= yLimit; y += yRatio) {
         for (let x = -xLimit; x <= xLimit; x += xRatio) {
@@ -329,7 +431,8 @@ function animation() {
             }
             // Get vector then transform according to rotational matrix
             let ray = new Vector(camPnt, new Point([x, y, 0]), null).norm();
-            image += torus.lineCollide(ray);
+            image += shape.lineCollide(ray);
+            // console.log(shape.lineCollide(ray)); 
         }
         image += "\n";
     }
