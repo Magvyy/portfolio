@@ -72,25 +72,7 @@ body {
     background-color:rgb(45, 49, 53) !important;
 }
 
-#torus div {
-    padding: calc(60vw / 30);
-    width: fit-content;
-    height: fit-content;
-}
-
-#torus .card-body {
-    width: 60vw !important;
-}
-
-#torus h5 {
-    width: 100% !important;
-}
-
 #torus-text {
-    font-size: calc(60vw / 30) !important;
-    line-height: calc(60vw / 30) !important;
-    width: 100%;
-    height: fit-content;
     font-family: monospace;
     color: white !important;
     white-space: pre;
@@ -102,7 +84,7 @@ body {
 }
 
 footer {
-    font-size: 5vw;
+    font-size: 40px;
 }
 
 #dhops {
@@ -110,6 +92,7 @@ footer {
 }
 
 @media (max-width: 991px) {
+
     .navbar-toggler {
         height: 60px;
             width: 80px;
@@ -129,15 +112,42 @@ footer {
 }
 
 @media (max-width: 700px) {
+    p {
+        font-size: 20px !important;
+    }
+
     #projects {
         grid-template-columns: 90vw !important;
         grid-template-rows: repeat(3, fit-content);
     }
+
+    #torus .card-body {
+        padding: 10px;
+    }
+
+    #torus div h5 {
+        width: 392px !important;
+    }
+
+    #torus-text {
+        max-width: fit-content !important;
+        font-size: 14px !important;
+        line-height: 14px !important;
+    }
 }
 
 @media (max-width: 425px) {
-
     p {
-        font-size: 1.5rem !important;
+        font-size: 30px !important;
+    }
+
+    #torus div h5 {
+        width: 280px !important;
+    }
+
+    #torus-text {
+        max-width: fit-content !important;
+        font-size: 10px !important;
+        line-height: 10px !important;
     }
 }
