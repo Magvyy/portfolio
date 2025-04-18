@@ -33,6 +33,10 @@ body {
     margin-bottom: 10px;
 }
 
+#me p {
+    font-size: 30px !important;
+}
+
 #projects {
     display: grid;
     grid-template-columns: repeat(1, minmax(50vw, 800px));
@@ -50,6 +54,10 @@ body {
     padding: 20px;
     display: grid;
     grid-template-rows: auto auto 40px;
+}
+
+.project-card * {
+    font-size: 20px !important;
 }
 
 .btn {
